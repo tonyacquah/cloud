@@ -1,0 +1,55 @@
+Parameters:
+    myVPC:
+        Description: VPC used to deploy the resources that follow it in this file
+        Type: AWS::EC2::VPC::Id
+    PublicSubnet:
+        Description: Subnet to use for Web Server
+        Type: AWS::EC2::Subnet::Id
+    AMItoUse:
+        Description: AMI to use for creating the EC2 image
+        Type: String
+    
+Description: A stack that creates an EC2 instance in a VPC
+
+Resources:
+#First resource is a security group using an existing VPC
+#This security group should allow outbound connections to all destinations
+#and inbound connections to TCP port 80
+    myWebAccessSecurityGroup2:
+        Type: AWS::EC2::SecurityGroup
+        Properties: 
+            GroupDescription: MY EC2 security group
+            GroupName: AcquahWebAccessSecurityGroup2
+            SecurityGroupEgress: 
+                CidrIp: 0.0.0.0/0
+                IpProtocol: -1
+                ToPort: -1
+                Description: Allow all outbound connections
+            SecurityGroupIngress: 
+                CidrIp: 0.0.0.0/0
+                IpProtocol: tcp
+                FromPort: 80
+                ToPort: 80
+                Description: Allow only TCP port 80 
+            VpcId: 
+                Ref: myVPC
+#Second resource is an EC2 Instance
+    myWebAccessServerInstance:
+        Type: AWS::EC2::Instance
+        Properties:
+          InstanceType: t3.micro
+          ImageId: 
+              Ref: AMItoUse
+          NetworkInterfaces: 
+              - AssociatePublicIpAddress: "true"
+                DeviceIndex: "0"
+                GroupSet: 
+                  - Ref: "myWebAccessSecurityGroup2"
+                SubnetId: !Ref "PublicSubnet"
+          UserData:
+              Fn::Base64: !Sub |
+                #!/bin/bash
+                sudo yum update -y
+                sudo yum install -y httpd
+                sudo systemctl start httpd
+                sudo systemctl enable httpd

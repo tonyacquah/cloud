@@ -14,7 +14,7 @@ The parameters file for this and subsequent Cloudformation scripts is to ensure 
 -Routing Tables
 
 The cloud network was created with with high availability in mind. Hence we can see the subnets are split in two availability zones.
-Elastic IPs were used in order to ensure that the same IP is associated with the Internet gateway. 
+Elastic IPs were used in order to ensure that the same IP is consistently associated with the Internet gateway after first assignment. 
 The cloud diagram 02-CloudNetwork.jpeg was created in Lucidchart and is partially implemented in the cloudformation script 
 
 

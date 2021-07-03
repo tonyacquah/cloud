@@ -1,9 +1,9 @@
 # cloud
----
+
 01-SimpleWebserver is Infrastrcture as code Cloudformation script for an apache webserver deployed in a AWS Virtual Private Container.
 There is a YAML file and a JSON parameters file. 
 The parameters file for this and subsequent Cloudformation scripts is to ensure parameter values are decoupled from the main script for easier maintenace
----
+
 02-cloudNetwork is another Cloudformation script for a cloud network that includes
 -A VPC
 -Public and Private Subnets
